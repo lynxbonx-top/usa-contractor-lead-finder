@@ -1,3 +1,22 @@
+import subprocess
+import sys
+from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+
+def ensure_chromium():
+    with sync_playwright() as p:
+        browser_path = Path(p.chromium.executable_path)
+
+    if not browser_path.exists():
+        subprocess.run(
+            [sys.executable, "-m", "playwright", "install", "chromium"],
+            check=True,
+        )
+
+ensure_chromium()
+
+
 import streamlit as st
 import pandas as pd
 from datetime import date
